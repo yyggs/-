@@ -1,0 +1,32 @@
+calMon ( myMoney myRate endMoney aTest atest )
+(
+    aTest = 1
+    loop 5
+            aTest = 1
+            aTest = 1
+            atest = 1
+            aTest_1 = aTest_2
+    loopend
+    myMoney = aTest
+)
+
+mul ( leftNum rightNum )
+(
+    firstNum = 0
+    leftNum = leftNuma
+    loop rightNum
+    firstNum = firstNum + leftNum
+    loopend
+    leftNum = firstNum
+)
+
+{
+        rate = 2
+        myMoney = 1
+        mul ( myMoney rate )
+        loop 5
+                myEnd_money = rate + myMoney
+        loopend
+        your_End = myEnd_money + yourMoneythisisatestforsentence
+        Mymoney = aMoney - your_End
+}

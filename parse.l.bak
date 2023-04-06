@@ -1,0 +1,25 @@
+%option noyywrap never-interactive
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include "parser.h"
+%}
+
+left {
+right }
+num [0-9]
+var [a-z]
+equal =
+add +
+
+
+%%
+{left} {return T_LEFT;}
+{right} {return T_RIGHT;}
+{num} {return T_NUM;}
+{var} {return T_VAR;}
+{equal} {return T_EQUAL;}
+{add} {return T_ADD;}
+
+%%
