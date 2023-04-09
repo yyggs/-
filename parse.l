@@ -22,6 +22,7 @@ var ({letter}|_)({letter}|_|{num})*
 equal [=]
 add [+]
 sub [-]
+err ({num})({letter}|_|{num})*
 
 %%
 {loop} {tk.kind = Parser::T_LOOP; tk.string = QString(QLatin1String(yytext));  return 0;}
@@ -35,5 +36,6 @@ sub [-]
 {equal} {tk.kind = Parser::T_EQUAL; tk.string = QString(QLatin1String(yytext));  return 0;}
 {add} {tk.kind = Parser::T_ADD; tk.string = QString(QLatin1String(yytext));  return 0;}
 {sub} {tk.kind = Parser::T_SUB; tk.string = QString(QLatin1String(yytext));  return 0;}
-
+[" "] {}
+.  {qDebug() << "未识别的标识符：" << yytext; return 1;}
 %%

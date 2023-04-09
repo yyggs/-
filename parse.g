@@ -50,7 +50,8 @@ public:
 	};
 	
 	documentast* tree;
-	
+    int kind;
+    int pos;
 	Parser();
 	~Parser();
 	
@@ -162,19 +163,25 @@ Parser::Parser()
     _state_stack.resize(128);
     _location_stack.resize(128);
     _symbol_stack.resize(128);
-
+    kind = -1;
+    pos = -1;
     _tokens.push_back(token()); // invalid token
     while (tk.kind != T_RIGHT)
     {
-        yylex();
+        if(yylex() == 1){
+            kind = check::FLEXERR;
+            pos = tk.position;
+            return;
+        }else{
         tk.position += 1;
-        if(tk.kind == T_VAR && NameCheck(tk.string) == false){
-            //check(check::NAMEERR, tk.position);
+            if(tk.kind == T_VAR && NameCheck(tk.string) == false){
+                //check(check::NAMEERR, tk.position);
+                //qDebug() << tk.string;
+                errlist.push_back(check(check::NAMEERR, tk.position));
+            }
+            _tokens.push_back(tk);
             //qDebug() << tk.string;
-            errlist.push_back(check(check::NAMEERR, tk.position));
         }
-        _tokens.push_back(tk);
-        //qDebug() << tk.string;
     } ;
 //    qDebug() << _tokens.size();
 //    int t = 1;

@@ -29,7 +29,8 @@ public:
 	};
 	
 	documentast* tree;
-	
+    int kind;
+    int pos;
 	Parser();
 	~Parser();
 	

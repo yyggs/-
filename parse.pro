@@ -31,5 +31,6 @@ HEADERS  += mainwindow.h \
 
 
 DISTFILES += parse.l \ parse.g \
-    sample.txt
+    sample.txt \
+    command
 FORMS    += mainwindow.ui

@@ -102,80 +102,93 @@ void MainWindow::printF(){
 
 
     Parser pa = Parser();
-    pa.parse(0);
-    pa.tree->printstring();
-
-    for (int i = 0; i < errlist.size(); i++) {
-        int index = errlist[i].position - 1;
-        switch(errlist[i].kind){
-        case check::NAMEERR:
-            if (index >= 0 && index < words.size()) {
-                // 获取目标单词的QTextCursor
-                QTextCursor cursor = codeEditor->textCursor();
-                //int a = text.indexOf(words[index]);
-                //int b = index;
-                cursor.setPosition(0 + text.indexOf(words[index]));
-                cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-                // 将单词设置为红色
-                QTextCharFormat format;
-                format.setForeground(Qt::red);
-                cursor.setCharFormat(format);
-            }
-            break;
-        case check::VARERR:
-            if (index >= 0 && index < words.size()) {
-                // 获取目标单词的QTextCursor
-                QTextCursor cursor = codeEditor->textCursor();
-                cursor.setPosition(0 + text.indexOf(words[index]));
-                cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-                // 将单词设置为蓝色
-                QTextCharFormat format;
-                format.setForeground(Qt::blue);
-                cursor.setCharFormat(format);
-            }
-            break;
-        case check::SENTENCEERR:
-        {//int aim = calnum(index);
-            //qDebug() << calnum(index);
-            int lineNum = calnum(index) - 1;  // QTextEdit中的行号从0开始
-            QTextCursor cursor = codeEditor->textCursor();  // 获取当前光标
-            cursor.movePosition(QTextCursor::Start);  // 移动光标到文本开头
-            for (int i = 0; i < lineNum; i++) {
-                cursor.movePosition(QTextCursor::NextBlock);  // 逐行移动光标
-            }
-            QTextBlockFormat blockFormat = cursor.blockFormat();  // 获取该行的格式
-            blockFormat.setBackground(Qt::yellow);
-                    //setUnderlineStyle(QTextCharFormat::SingleUnderline);  // 设置下划线
-            cursor.setBlockFormat(blockFormat);  // 将格式应用到该行
-            break;
-        }
-        case check::CIRERR:
-            index -= 2;
-            if (index >= 0 && index < words.size()) {
-                // 获取目标单词的QTextCursor
-                QTextCursor cursor = codeEditor->textCursor();
-                cursor.setPosition(0 + text.indexOf(words[index]));
-                cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-                // 将单词设置为蓝色
-                QTextCharFormat format;
-                format.setForeground(Qt::green);
-                cursor.setCharFormat(format);
-            }
-            break;
+    if(pa.kind == check::FLEXERR){
+        QMessageBox::information(NULL, "ERR", "unrecognized identifier", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        QTextCursor cursor = codeEditor->textCursor();
+        cursor.setPosition(0 + text.indexOf(words[pa.pos]));
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        // 将单词设置为红色
+        QTextCharFormat format;
+        format.setForeground(Qt::red);
+        cursor.setCharFormat(format);
+    }else{
 
 
-        case check::FUNERR:
-            int lineNum = calnum(index) - 1;  // QTextEdit中的行号从0开始
-            QTextCursor cursor = codeEditor->textCursor();  // 获取当前光标
-            cursor.movePosition(QTextCursor::Start);  // 移动光标到文本开头
-            for (int i = 0; i < lineNum; i++) {
-                cursor.movePosition(QTextCursor::NextBlock);  // 逐行移动光标
+        pa.parse(0);
+        pa.tree->printstring();
+
+        for (int i = 0; i < errlist.size(); i++) {
+            int index = errlist[i].position - 1;
+            switch(errlist[i].kind){
+            case check::NAMEERR:
+                if (index >= 0 && index < words.size()) {
+                    // 获取目标单词的QTextCursor
+                    QTextCursor cursor = codeEditor->textCursor();
+                    //int a = text.indexOf(words[index]);
+                    //int b = index;
+                    cursor.setPosition(0 + text.indexOf(words[index]));
+                    cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+                    // 将单词设置为红色
+                    QTextCharFormat format;
+                    format.setForeground(Qt::red);
+                    cursor.setCharFormat(format);
+                }
+                break;
+            case check::VARERR:
+                if (index >= 0 && index < words.size()) {
+                    // 获取目标单词的QTextCursor
+                    QTextCursor cursor = codeEditor->textCursor();
+                    cursor.setPosition(0 + text.indexOf(words[index]));
+                    cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+                    // 将单词设置为蓝色
+                    QTextCharFormat format;
+                    format.setForeground(Qt::blue);
+                    cursor.setCharFormat(format);
+                }
+                break;
+            case check::SENTENCEERR:
+            {//int aim = calnum(index);
+                //qDebug() << calnum(index);
+                int lineNum = calnum(index) - 1;  // QTextEdit中的行号从0开始
+                QTextCursor cursor = codeEditor->textCursor();  // 获取当前光标
+                cursor.movePosition(QTextCursor::Start);  // 移动光标到文本开头
+                for (int i = 0; i < lineNum; i++) {
+                    cursor.movePosition(QTextCursor::NextBlock);  // 逐行移动光标
+                }
+                QTextBlockFormat blockFormat = cursor.blockFormat();  // 获取该行的格式
+                blockFormat.setBackground(Qt::yellow);
+                        //setUnderlineStyle(QTextCharFormat::SingleUnderline);  // 设置下划线
+                cursor.setBlockFormat(blockFormat);  // 将格式应用到该行
+                break;
             }
-            QTextBlockFormat blockFormat = cursor.blockFormat();  // 获取该行的格式
-            blockFormat.setBackground(Qt::darkGray);
-                    //setUnderlineStyle(QTextCharFormat::SingleUnderline);  // 设置下划线
-            cursor.setBlockFormat(blockFormat);  // 将格式应用到该行
-            break;
+            case check::CIRERR:
+                index -= 2;
+                if (index >= 0 && index < words.size()) {
+                    // 获取目标单词的QTextCursor
+                    QTextCursor cursor = codeEditor->textCursor();
+                    cursor.setPosition(0 + text.indexOf(words[index]));
+                    cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+                    // 将单词设置为蓝色
+                    QTextCharFormat format;
+                    format.setForeground(Qt::green);
+                    cursor.setCharFormat(format);
+                }
+                break;
+
+
+            case check::FUNERR:
+                int lineNum = calnum(index) - 1;  // QTextEdit中的行号从0开始
+                QTextCursor cursor = codeEditor->textCursor();  // 获取当前光标
+                cursor.movePosition(QTextCursor::Start);  // 移动光标到文本开头
+                for (int i = 0; i < lineNum; i++) {
+                    cursor.movePosition(QTextCursor::NextBlock);  // 逐行移动光标
+                }
+                QTextBlockFormat blockFormat = cursor.blockFormat();  // 获取该行的格式
+                blockFormat.setBackground(Qt::darkGray);
+                        //setUnderlineStyle(QTextCharFormat::SingleUnderline);  // 设置下划线
+                cursor.setBlockFormat(blockFormat);  // 将格式应用到该行
+                break;
+            }
         }
     }
 

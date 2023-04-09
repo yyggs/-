@@ -10,6 +10,7 @@ class check
 {
 public:
     enum Kind{
+        FLEXERR,
         NAMEERR,
         SENTENCEERR,
         CIRERR,
